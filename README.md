@@ -177,3 +177,95 @@
       "msg2": "",
       "obj": null
     } 
+    
+    조회 API
+    
+    http://localhost:8080/getPaySprayInfo.do
+
+    입력부 : Header
+    Content-Type: application/json
+    X-USER-ID: 0000
+    X-ROOM-ID: 9999
+
+    입력부 : Body
+    {
+      "tokenId" : "ZAH"
+    }
+
+    출력부
+    {
+      "rslt": "SUCCESS",
+      "errCode": null,
+      "msg": null,
+      "msg2": null,
+      "obj": 
+      {
+        "endGetAmt": 
+        [
+          {
+            "tokenId": "ZAH",
+            "getTime": 1606035833000,
+            "getAmt": 866,
+            "idx": 11,
+            "userId": "1001",
+            "seq": 25,
+            "roomId": "9999"
+          },
+
+          {
+            "tokenId": "ZAH",
+            "getTime": 1606036199000,
+            "getAmt": 71,
+            "idx": 11,
+            "userId": "1002",
+            "seq": 26,
+            "roomId": "9999"
+          },
+
+          {
+            "tokenId": "ZAH",
+            "getTime": 1606036495000,
+            "getAmt": 63,
+            "idx": 11,
+            "userId": "1003",
+            "seq": 27,
+            "roomId": "9999"
+          }
+        ],
+
+        "sprayAmt": 1000,
+        "tokenId": "ZAH",
+        "createTime": 1606035580000,
+        "idx": 11,
+        "userId": "0000",
+        "roomId": "9999"
+      }
+    }
+    
+    
+  ## 4. database info
+  
+      CREATE TABLE `TBPAYSPRAY` (
+      `idx` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '거래순번',
+      `roomId` varchar(100) NOT NULL COMMENT '대화방ID',
+      `userId` int(11) NOT NULL COMMENT '생성자ID',
+      `tokenId` varchar(100) NOT NULL COMMENT '토큰정보',
+      `sprayAmt` int(10) unsigned DEFAULT NULL COMMENT '뿌리기금액',
+      `cntPeople` int(10) unsigned DEFAULT NULL COMMENT '분배인원',
+      `createTime` timestamp NULL DEFAULT current_timestamp() COMMENT '생성시각',
+      `endTime` timestamp NULL DEFAULT current_timestamp() COMMENT '종료시각',
+      PRIMARY KEY (`idx`,`roomId`,`userId`,`tokenId`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4
+
+
+    CREATE TABLE `TBPAYSPRAYDETAIL` (
+      `seq` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'seq',
+      `idx` bigint(20) unsigned NOT NULL COMMENT '거래순번',
+      `roomId` varchar(100) NOT NULL COMMENT '대화방ID',
+      `tokenId` varchar(100) NOT NULL COMMENT '토큰정보',
+      `userId` int(11) DEFAULT NULL COMMENT '대상자ID',
+      `getAmt` int(10) unsigned DEFAULT NULL COMMENT '줍기금액',
+      `getTime` datetime DEFAULT NULL COMMENT '줍기시각',
+      PRIMARY KEY (`seq`,`idx`,`roomId`,`tokenId`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4
+
