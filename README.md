@@ -36,7 +36,7 @@
   
   ## 4. 단위테스트
   
-    - 뿌리기 API
+   ### 4-1 뿌리기 API
     
       http://localhost:8080/createPaySpray.do
 
@@ -81,7 +81,7 @@
        27| 11|9999  |ZAH    |      |    63|       |
        
        
-    받기 API
+  ### 4-2 받기 API
     
     http://localhost:8080/getAmt.do
     
@@ -187,7 +187,7 @@
       "obj": null
     } 
     
-    조회 API
+  ### 4-3 조회 API
     
     http://localhost:8080/getPaySprayInfo.do
 
