@@ -54,7 +54,7 @@
 			,tbpsd.getAmt
 			,MAX(tbpsd.getAmt) as maxAmt
 			,tbps.createTime
-			,IF(tbps.createTime >= DATE_SUB(NOW(), INTERVAL 10 MINUTE), true, false) as timeFlag
+			,IF(tbps.createTime >= DATE_SUB(NOW(), INTERVAL 10 MINUTE), 'Y', 'N') as timeFlag
 		FROM kakaoPay.TBPAYSPRAY tbps, kakaoPay.TBPAYSPRAYDETAIL tbpsd
 		WHERE tbps.idx = tbpsd.idx 
 		AND tbpsd.roomId = #{roomId}

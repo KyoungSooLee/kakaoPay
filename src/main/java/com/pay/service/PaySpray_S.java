@@ -127,14 +127,14 @@ public class PaySpray_S{
 			Map<String, Object> mapCheckGetAmt = cdao.selectOne("paySpray.selectCheckGetAmt", param);
 			
 			if(mapCheckGetAmt != null && !mapCheckGetAmt.isEmpty()){		//받기 가능한 정보가 존재하는경우 해당 정보를 응답값에 설정
-				
-				if (!Boolean.valueOf(String.valueOf(mapCheckGetAmt.get("timeFlag")))){
+
+				if ("N".equals(String.valueOf(mapCheckGetAmt.get("timeFlag")))){
 					
 					//뿌리기 한건은 10분간만 유효함
 					resobj.setErrStr(ExceptionMsg.ERR_CUSTOM_MSG, "마감되었습니다. 다음 기회에!");
 					throw new Exception();
 					
-				}else if(StringUtil.NVL((String) param.get("userId")).equals(StringUtil.NVL((String) mapCheckGetAmt.get("createUserId")))){
+				}else if(StringUtil.NVL(String.valueOf(param.get("userId"))).equals(StringUtil.NVL(String.valueOf(mapCheckGetAmt.get("createUserId"))))){
 					
 					//자신이 뿌리기한 건은 받을수 없음
 					resobj.setErrStr(ExceptionMsg.ERR_CUSTOM_MSG, "자신이 뿌리기한 건은 자신이 받을 수 없습니다.");
