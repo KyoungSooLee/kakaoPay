@@ -23,14 +23,18 @@
 
 
 
-     -> 개발방향 
+  ## 3. 개발방향 
     
-              - 뿌리기 API 요청시 뿌리기 정보 생성이후 받기에 필요한 정보를 마스터와 상세 테이블에 등록이후 받기 API 요청시 요청한 사용자의 정보를 업데이트 하는 프로세서로 구현
+      - 뿌리기 API 요청시 뿌리기 정보 생성이후 받기에 필요한 정보를 마스터와 상세 테이블에 등록이후 받기 API 요청시 요청한 사용자의 정보를 업데이트 하는 프로세서로 구현
+
+      - Talend API tester로 거래테스트를 진행
+      
+      - 오류응답 처리는 ExceptionMsg.java 를 이용해서 처리
+      
+      - 응답부는 ResponseObj.java 를 이용해서 처리
   
-              - Talend API tester로 거래테스트를 진행
   
-  
-  ## 3. 단위테스트
+  ## 4. 단위테스트
   
     - 뿌리기 API
     
@@ -248,7 +252,7 @@
     }
     
     
-  ## 4. database info
+  ## 5. database info
   
       CREATE TABLE `TBPAYSPRAY` (
       `idx` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '거래순번',
