@@ -1,4 +1,4 @@
-# kakaoPay
+# kakaoPay 뿌리기 기능 
 
 ## 1. 개발환경
   - eclipse
