@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paySpray">
+    
+    <!-- TBPAYSRAY 기본 정보 등록 -->
+    <insert id="createPaySpray" parameterType="map" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO kakaoPay.TBPAYSPRAY (
+			roomId
+			,userId
+			,tokenId
+			,sprayAmt
+			,cntPeople
+			,createTime
+			,endTime
+		) VALUES (
+			#{roomId}
+			,#{userId}
+			,#{tokenId}
+			,#{sprayAmt}
+			,#{cntPeople}
+			,CURRENT_TIMESTAMP
+			,CURRENT_TIMESTAMP
+		)
+	</insert>
+	
+	<!-- TBPAYSRAYDETAIL 상세 증보 등록 -->
+	<insert id="createPaySprayDetail" parameterType="java.util.List">
+		INSERT INTO kakaoPay.TBPAYSPRAYDETAIL (
+			idx
+			,roomId
+			,userId
+			,tokenId
+			,getAmt
+		) VALUES
+		<foreach collection="list" item="item" separator=" , ">
+			(
+			#{item.idx}
+			,#{item.roomId}
+			,#{item.userId}
+			,#{item.tokenId}
+			,#{item.getAmt}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 받기 가능한 대상 조회 -->
+	<select id="selectCheckGetAmt" resultType="map">
+		SELECT 
+			tbps.idx
+			,tbps.roomId
+			,tbps.userId as createUserId
+			,tbpsd.userId
+			,tbpsd.seq
+			,tbpsd.getAmt
+			,MAX(tbpsd.getAmt) as maxAmt
+			,tbps.createTime
+			,IF(tbps.createTime >= DATE_SUB(NOW(), INTERVAL 10 MINUTE), true, false) as timeFlag
+		FROM kakaoPay.TBPAYSPRAY tbps, kakaoPay.TBPAYSPRAYDETAIL tbpsd
+		WHERE tbps.idx = tbpsd.idx 
+		AND tbpsd.roomId = #{roomId}
+		AND tbpsd.tokenId = #{tokenId}
+		AND tbpsd.userId is null
+		HAVING MAX(tbpsd.getAmt) is not null
+	</select>
+	
+	<!-- 이미 받은 대상 조회 -->
+	<select id="selectCheckGetAmtDup" resultType="map">
+		SELECT 
+			*
+		FROM kakaoPay.TBPAYSPRAYDETAIL
+		WHERE idx = #{idx}
+		AND roomId = #{roomId}
+		AND tokenId = #{tokenId}
+		AND userId = #{userId}
+		AND userId is not null
+	</select>
+	
+	<!-- 받기 정보 상세테이블에 수정 -->
+	<update id="updateGetAmt">
+        UPDATE kakaoPay.TBPAYSPRAYDETAIL
+        SET userId = #{userId}
+        	,getTime = CURRENT_TIMESTAMP
+        WHERE seq = #{seq} 
+        AND idx = #{idx}
+		AND roomId = #{roomId}
+		AND tokenId = #{tokenId}
+        
+    </update>
+	
+	<!-- 뿌리기 정보 조회 -->
+	<select id="selectPaySprayInfo" resultType="map">
+		SELECT 
+			tbps.idx 
+			,tbps.roomId 
+			,tbps.tokenId
+			,tbps.userId
+			,tbps.createTime
+			,tbps.sprayAmt 
+			,(SELECT 
+				SUM(getAmt) 
+			FROM kakaoPay.TBPAYSPRAYDETAIL 
+			WHERE idx = tbps.idx
+			AND roomId = tbps.roomId
+			AND tokenId = tbps.tokenId
+			AND userId IS NOT NULL) AS endGetAmt
+		FROM kakaoPay.TBPAYSPRAY tbps
+		WHERE tbps.userId = #{userId}
+		AND tbps.tokenId = #{tokenId}
+		AND tbps.createTime >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+	</select>
+	
+	<!-- 뿌리기 정보 상세 조회 -->
+	<select id="selectPaySprayDetailInfo" resultType="map">
+		SELECT
+			seq
+			,idx 
+			,roomId 
+			,tokenId 
+			,userId 
+			,getAmt 
+			,getTime 
+		FROM kakaoPay.TBPAYSPRAYDETAIL 
+		WHERE idx = #{idx}
+		AND roomId = #{roomId}
+		AND tokenId = #{tokenId}
+		AND userId IS NOT NULL
+	</select>
+
+</mapper>

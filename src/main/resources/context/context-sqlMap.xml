@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Mybatis SqlSessionFactory Bean -->
+    <bean id="sqlSessionFactory" class="com.kakao.common.bean.RefreshableSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="/WEB-INF/classes/sqlmap/conf/sqlMapConfig.xml" />
+        <property name="mapperLocations" value="/WEB-INF/classes/sqlmap/mappers/${Globals.DbType}/*.xml" />
+        <property name="checkInterval" value="1000" />        
+    </bean>
+    
+    <!-- SqlSession Bean -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+    </bean>
+    
+    <bean id="comDao" class="com.kakao.common.dao.Common_Dao"> 
+        <property name="sqlSession" ref="sqlSession" /> 
+        <qualifier value="comDB" /> 
+    </bean>
+
+</beans>
