@@ -1,4 +1,4 @@
-# kakaoPay
+# kakaoPay 뿌리기 기능 
 
 ## 1. 개발환경
   - eclipse
@@ -25,7 +25,8 @@
 
   ## 3. 개발방향 
     
-      - 뿌리기 API 요청시 뿌리기 정보 생성이후 받기에 필요한 정보를 마스터와 상세 테이블에 등록이후 받기 API 요청시 요청한 사용자의 정보를 업데이트 하는 프로세서로 구현
+      - 뿌리기 API 요청시 뿌리기 정보 생성이후 받기에 필요한 정보를 마스터와 상세 테이블에 등록이후
+        받기 API 요청시 요청한 사용자의 정보를 업데이트 하는 프로세서로 구현
 
       - Talend API tester로 거래테스트를 진행
       
@@ -36,7 +37,7 @@
   
   ## 4. 단위테스트
   
-    - 뿌리기 API
+   ### 4-1 뿌리기 API
     
       http://localhost:8080/createPaySpray.do
 
@@ -81,7 +82,7 @@
        27| 11|9999  |ZAH    |      |    63|       |
        
        
-    받기 API
+  ### 4-2 받기 API
     
     http://localhost:8080/getAmt.do
     
@@ -187,7 +188,7 @@
       "obj": null
     } 
     
-    조회 API
+  ### 4-3 조회 API
     
     http://localhost:8080/getPaySprayInfo.do
 
